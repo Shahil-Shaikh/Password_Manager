@@ -1,1 +1,11 @@
 @import "tailwindcss";
+
+/* customised colors */
+/* --color-* is a namespace in tailwind
+We add our customs colors by using @theme */
+@theme {
+    --color-green1: #005461;
+    --color-green2: #0C7779;
+    --color-green3: #0C7779;
+    --color-green4: #3BC1A8;
+}
