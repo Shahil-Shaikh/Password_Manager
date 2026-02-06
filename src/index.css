@@ -5,9 +5,10 @@
 We add our customs colors by using @theme */
 @theme {
     --color-green1: #005461;
-    --color-green2: #0C7779;
+    --color-green2: #63d16b;
     --color-green3: #0C7779;
     --color-green4: #3BC1A8;
+    
 }
 
 /* we have created a new classs content_size and it will apply the max-w-5xl, mx-auto classes */
@@ -16,5 +17,12 @@ We add our customs colors by using @theme */
     /* 2xl:mx-52 is a media query.
     In 2xl:mx-52 the thing before colon means the screen size (2xl = 1536px and above) and after colon 
     means the margin class (mx-52 = margin-left and margin-right = 52px) */
+}
 
+.input_style{
+    @apply border-3 border-green4 rounded-4xl  px-4 py-3 w-full outline-none focus:border-green3 transition duration-330;
+    /* here we could use grow for the input to stretch and fill available space 
+    but as the parent div is a flex column, the inputs are already stretching to fill available width 
+    so instead grow which only works in flex containers with flex-direction: row .
+    we have used w-full which will in result stretch the input to full width of its parent div container (i.e. input_container )*/
 }

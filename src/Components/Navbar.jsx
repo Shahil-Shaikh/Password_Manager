@@ -12,6 +12,7 @@ function Navbar() {
     <div className=" bg-green1 h-15 w-max-full ">
       <div className=" h-full w-auto flex items-center justify-between   content_size">
         {/* h-full and w-full takes the same height and width from parent element */}
+        {/* this second div is present inside the main nav div and this second div holds all the elements. It is mainly added so that we can have some space around the logo and menubar altogether in the x axis on both side within the navbar which is the parent div (i.e. main nav div) */}
 
         <div className='logo'>
           <a href="#"><img src={logo} alt="" className='h-6' /></a>
