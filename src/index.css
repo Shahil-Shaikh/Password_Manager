@@ -9,3 +9,12 @@ We add our customs colors by using @theme */
     --color-green3: #0C7779;
     --color-green4: #3BC1A8;
 }
+
+/* we have created a new classs content_size and it will apply the max-w-5xl, mx-auto classes */
+.content_size {
+    @apply 2xl:mx-52 md:mx-26 ;
+    /* 2xl:mx-52 is a media query.
+    In 2xl:mx-52 the thing before colon means the screen size (2xl = 1536px and above) and after colon 
+    means the margin class (mx-52 = margin-left and margin-right = 52px) */
+
+}
