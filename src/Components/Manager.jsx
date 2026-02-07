@@ -1,6 +1,18 @@
 import React from 'react'
+import { useRef, useState } from 'react'
 
 function Manager() {
+    const [PsswdValue, setPsswdValue] = useState("Show")
+    const a = useRef()
+    let psswdShowFun = () => {
+        if(PsswdValue==="Show"){
+            setPsswdValue("Hide")
+            a.current.type="text"
+        }
+        else{
+            setPsswdValue("Show")
+        }
+    }
     return (
         <div>
 
@@ -15,9 +27,16 @@ function Manager() {
 
                     <div className='input_container flex flex-col items-center px-20 gap-y-2 mb-5 relative '>
                         <input type="text" placeholder='Website URL' className='input_style' />
-                        <input type="password" placeholder='Password' className='input_style' />
-                        <span className='  font-semibold cursor-pointer text-green1 absolute top-20 right-24 text-sm hover:text-green-300 transition-colors duration-300'>
-                            Show
+                        <input ref={a} type={PsswdValue === "Show" ? "password" : "text"} placeholder='Password' className='input_style' />
+                        {/* in order to change the show/hide in password input, we have used useState and as per showing the password
+                        or hiding it actually we will simply change the type of input to text by referencing the input using useRef.
+
+                        Now the initial value of PsswdValue while declaring it is set to Show and that when detected by the PsswdValue == "Show" condition
+                        , it return the password which gets initialized inside type or else text is set when the condition gets false when the PsswdValue 
+                        is set to "Hide" and as a result the type gets text. */}
+                       
+                        <span onClick={psswdShowFun} className=' font-semibold cursor-pointer text-green1 absolute top-20 right-24 text-sm hover:text-green-300 transition-colors duration-300 select-none'>
+                            {PsswdValue}
                         </span>
                         <button className='submit_button bg-green4 py-2 px-4 h-auto w-fit rounded-4xl text-2xl text-white font-normal flex items-center justify-center gap-x-2 hover:bg-green-300 hover:text-green-700 transition-colors duration-300'>
                             <lord-icon
