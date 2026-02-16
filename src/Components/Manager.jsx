@@ -1,11 +1,43 @@
 import React from 'react'
-import { useRef, useState } from 'react'
+import { useRef, useState, useEffect } from 'react'
 
 function Manager() {
     const [PsswdValue, setPsswdValue] = useState("Show")
     const [form, setform] = useState({"site": "", "psswd": ""})
-    const a = useRef()
+    const [_password_array, set_password_array] = useState([])
 
+    
+// const passowrds = localStorage.getItem("psswds") 
+// dont put the above line here instead putting it inside the useEffect
+    useEffect(() => {
+        const passowrds = localStorage.getItem("psswds") 
+        //this will fetch the passwords stored in the local storage 
+        // and we are using useEffect so that it runs only once when the component is mounted 
+        // and we can fetch the passwords from the local storage and set it in the state 
+        // variable _password_array which we have declared for storing the passwords in the state.
+        //NOTE: Put the const passowrds = localStorage.getItem("psswds")  line inside the useEffect because if we put 
+        // it outside then it will run on every render and we don't want that as we only want to fetch the passwords 
+        // from the local storage when the component is mounted for the first time and not on every render. 
+        // So by putting it inside the useEffect with an empty dependency array, we ensure that it runs only once when the component is mounted and not on every render.
+        // and it creates weird behaviour if we put that line outside useEffect, see the react_localstorage_debug_note.md
+
+        if(passowrds){ //this means IF PASSWORD is present in the local storage or not 
+            
+            set_password_array(JSON.parse(passowrds))
+
+            // we are parsing the passwords bcz when we store the passwords in the local 
+            // storage we store it in the form of string and so when we fetch it we need 
+            // to parse it to convert it back to the original format which is an array 
+            // of objects in our case.
+        }
+    }, [])
+    
+
+    let handler = (e)=>{
+        setform({...form, [e.target.name]: e.target.value})
+    }
+
+    const a = useRef()
     let psswdShowFun = () => {
         if(PsswdValue==="Show"){
             setPsswdValue("Hide")
@@ -16,9 +48,30 @@ function Manager() {
         }
     }
 
-    let handler = (e)=>{
-        setform({...form, [e.target.name]: e.target.value})
+    
+
+    let submit = () => {
+      console.log(form); 
+        //   we can also now save it in the database using api call or we can also save it in the local storage of the browser.
+        // Now if we are storing it in local storage then we can do it like this :
+        // (first we will update password array and then we will update local storage)
+        set_password_array([..._password_array, form])
+        // by this we are pushing new password
+        // here it is array so instead {} curly brackets we are using [] square ones
+        localStorage.setItem("psswds", JSON.stringify([..._password_array, form]));
+        // here we are setting the item in the local storage with the key "psswds" which will replace the old value and the value is 
+        // the stringified version of the updated password array which includes the new password 
+        // that we just added. We need to stringify it because local storage can only store strings.
+        // NOTE: We could have use simply _password_array instead of [..._password_array, form] but we did not
+        // cuz it takes some time for tha state of the password array to update and if we use _password_array 
+        // then it will not include the new password that we just added and so we need to use the updated 
+        // version of the password array which is [..._password_array, form] to make sure that we are 
+        // storing the updated password array in the local storage. Otherwise the password stored will not 
+        // be the updated one and it will be the old one without the new password that we just added.
+        console.log(_password_array); 
+        //although while doing console.log it won't just display the current state instantly cuz it takes some time to update hte array while in the mean time the console.log is done with its execution
     }
+    
 
     return (
         <div>
@@ -45,7 +98,7 @@ function Manager() {
                         <span onClick={psswdShowFun} className=' font-semibold cursor-pointer text-green1 absolute top-20 right-24 text-sm hover:text-green-300 transition-colors duration-300 select-none'>
                             {PsswdValue}
                         </span>
-                        <button className='submit_button bg-green4 py-2 px-4 h-a00uto w-fit rounded-4xl text-2xl text-white font-normal flex items-center justify-center gap-x-2 hover:bg-green-300 hover:text-green-700 transition-colors duration-300'>
+                        <button onClick={submit} className='submit_button bg-green4 py-2 px-4 h-a00uto w-fit rounded-4xl text-2xl text-white font-normal flex items-center justify-center gap-x-2 hover:bg-green-300 hover:text-green-700 transition-colors duration-300'>
                             <lord-icon
                                 src="https://cdn.lordicon.com/fgxwhgfp.json"
                                 // this src defines  which icon to render.
