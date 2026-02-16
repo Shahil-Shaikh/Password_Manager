@@ -3,7 +3,9 @@ import { useRef, useState } from 'react'
 
 function Manager() {
     const [PsswdValue, setPsswdValue] = useState("Show")
+    const [form, setform] = useState({"site": "", "psswd": ""})
     const a = useRef()
+
     let psswdShowFun = () => {
         if(PsswdValue==="Show"){
             setPsswdValue("Hide")
@@ -13,6 +15,11 @@ function Manager() {
             setPsswdValue("Show")
         }
     }
+
+    let handler = (e)=>{
+        setform({...form, [e.target.name]: e.target.value})
+    }
+
     return (
         <div>
 
@@ -26,8 +33,8 @@ function Manager() {
                     {/* we are using flex-grow: 1 (i.e. "grow" in tailwind) in this item , flex-grow allows the item to grow as much as possible to cover entire available space */}
 
                     <div className='input_container flex flex-col items-center px-20 gap-y-2 mb-5 relative '>
-                        <input type="text" placeholder='Website URL' className='input_style' />
-                        <input ref={a} type={PsswdValue === "Show" ? "password" : "text"} placeholder='Password' className='input_style' />
+                        <input name="site" value={form.site} onChange={handler} type="text" placeholder='Website URL' className='input_style' />
+                        <input name="psswd" value={form.psswd} onChange={handler} ref={a} type={PsswdValue === "Show" ? "password" : "text"} placeholder='Password' className='input_style' />
                         {/* in order to change the show/hide in password input, we have used useState and as per showing the password
                         or hiding it actually we will simply change the type of input to text by referencing the input using useRef.
 
@@ -38,7 +45,7 @@ function Manager() {
                         <span onClick={psswdShowFun} className=' font-semibold cursor-pointer text-green1 absolute top-20 right-24 text-sm hover:text-green-300 transition-colors duration-300 select-none'>
                             {PsswdValue}
                         </span>
-                        <button className='submit_button bg-green4 py-2 px-4 h-auto w-fit rounded-4xl text-2xl text-white font-normal flex items-center justify-center gap-x-2 hover:bg-green-300 hover:text-green-700 transition-colors duration-300'>
+                        <button className='submit_button bg-green4 py-2 px-4 h-a00uto w-fit rounded-4xl text-2xl text-white font-normal flex items-center justify-center gap-x-2 hover:bg-green-300 hover:text-green-700 transition-colors duration-300'>
                             <lord-icon
                                 src="https://cdn.lordicon.com/fgxwhgfp.json"
                                 // this src defines  which icon to render.
