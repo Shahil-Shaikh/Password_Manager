@@ -1,9 +1,11 @@
 import React from 'react'
 import { useRef, useState, useEffect } from 'react'
+import { v4 as uuidv4 } from 'uuid';
+// uuid helps to generate unique id
 
 function Manager() {
     const [PsswdValue, setPsswdValue] = useState("Show")
-    const [form, setform] = useState({ "site": "", "psswd": "" })
+    const [form, setform] = useState({ "site": "", "psswd": "" }) //form is am object
     const [_password_array, set_password_array] = useState([])
 
 
@@ -55,10 +57,18 @@ function Manager() {
         //   we can also now save it in the database using api call or we can also save it in the local storage of the browser.
         // Now if we are storing it in local storage then we can do it like this :
         // (first we will update password array and then we will update local storage)
-        set_password_array([..._password_array, form])
+        set_password_array([..._password_array, { ...form, id: uuidv4() }])
         // by this we are pushing new password
         // here it is array so instead {} curly brackets we are using [] square ones
-        localStorage.setItem("psswds", JSON.stringify([..._password_array, form]));
+
+        // and instead [..._password_array, form] we are using the above line [..._password_array, {...form, id: uuidv4()}]
+        // this is because in the previous one form was an object. And now we want to add an extra data inside form object which is id,
+        // and so in order to do so, we are putting a different object in place of form inside [..._password_array, form] and that 
+        // becomes [..._password_array, {...form, id: uuidv4()}] where again inside {...form, id: uuidv4()} we are using spread sheet operator
+        // saying keep the form as it is but add "id:uuidv4()" key-value pair where uuidv4() generates unique id.
+        // 
+
+        localStorage.setItem("psswds", JSON.stringify([..._password_array, { ...form, id: uuidv4() }]));
         // here we are setting the item in the local storage with the key "psswds" which will replace the old value and the value is 
         // the stringified version of the updated password array which includes the new password 
         // that we just added. We need to stringify it because local storage can only store strings.
@@ -70,6 +80,15 @@ function Manager() {
         // be the updated one and it will be the old one without the new password that we just added.
         console.log(_password_array);
         //although while doing console.log it won't just display the current state instantly cuz it takes some time to update hte array while in the mean time the console.log is done with its execution
+    }
+
+// how the deletePsswd works is that it takes the id of the corresponding field and 
+// then it rewrites the array object with every element exvept the one which is being deleted 
+// by detecting the ids using filter
+    let deletePsswd = (id) => {
+       set_password_array(_password_array.filter((item)=>{
+            return id!==item.id;
+       }))
     }
 
 
@@ -129,6 +148,7 @@ function Manager() {
                                     <tr>
                                         <th>Sites</th>
                                         <th>Passwords</th>
+                                        <th>Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody className='px-1.5 text-white font-medium bg-green2'>
@@ -136,6 +156,26 @@ function Manager() {
                                         return <tr key={index}>
                                             <td className='py-2 border border-white'><a href={item.site} target='_blank'>{item.site}</a></td >
                                             <td className='py-2 border border-white'>{item.psswd}</td >
+                                            <td className='py-2 border border-white'>
+
+                                            
+                                                <lord-icon
+                                                    src="https://cdn.lordicon.com/exymduqj.json"
+                                                    trigger="hover"
+                                                    colors="primary:#121331,secondary:#ffffff"
+                                                    className="w-7">
+                                                </lord-icon>
+
+                                         
+                                                <lord-icon onClick={()=>{deletePsswd(item.id)}}
+                                                    src="https://cdn.lordicon.com/jzinekkv.json"
+                                                    trigger="hover"
+                                                    colors="primary:#121331,secondary:#ffffff"
+                                                    className="w-7">
+                                                </lord-icon>
+
+
+                                            </td >
                                         </tr>
                                     })}
 
@@ -145,7 +185,7 @@ function Manager() {
                                     {/* The key attribute in React is a special string attribute used to uniquely identify elements within a 
                                     list. This unique identity helps React efficiently track which items have changed, been added, or been 
                                     removed when the list is updated, thus optimizing the rendering process. */}
-                                    
+
                                 </tbody>
                             </table>
                         }
