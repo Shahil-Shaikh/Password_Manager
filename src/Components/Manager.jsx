@@ -120,81 +120,52 @@ function Manager() {
                     But here setting it to 0 will still cause it to resize as the height is not fixed rather it is 1/4 th of the parent container*/}
 
                         {/* Table showing the content for passwords */}
-                        
-                        <table className="table-auto  w-full h-full   text-center">
-                            <thead className='bg-green4 text-green1'>
-                                <tr>
-                                    <th>Song</th>
-                                    <th>Artist</th>
-                                    <th>Year</th>
-                                </tr>
-                            </thead>
-                            <tbody className='px-1.5 text-white font-medium bg-green2'>
-                                <tr>
-                                    <td>hisdfhgf</td>
-                                    <td>Malcolm Lockyer</td>
-                                    <td>1961</td>
-                                </tr>
-                                <tr>
-                                    <td>Witchy Woman</td>
-                                    <td>The Eagles</td>
-                                    <td>1972</td>
-                                </tr>
-                                <tr>
-                                    <td>Shining Star</td>
-                                    <td>Earth, Wind, and Fire</td>
-                                    <td>1975</td>
-                                </tr>
-                                <tr>
-                                    <td>hi</td>
-                                    <td>Malcolm Lockyer</td>
-                                    <td>1961</td>
-                                </tr>
-                                <tr>
-                                    <td>Witchy Woman</td>
-                                    <td>The Eagles</td>
-                                    <td>1972</td>
-                                </tr>
-                                <tr>
-                                    <td>Shining Star</td>
-                                    <td>Earth, Wind, and Fire</td>
-                                    <td>1975</td>
-                                </tr>
-                                <tr>
-                                    <td>hi</td>
-                                    <td>Malcolm Lockyer</td>
-                                    <td>1961</td>
-                                </tr>
-                                <tr>
-                                    <td>Witchy Woman</td>
-                                    <td>The Eagles</td>
-                                    <td>1972</td>
-                                </tr>
-                                <tr>
-                                    <td>Shining Star</td>
-                                    <td>Earth, Wind, and Fire</td>
-                                    <td>1975</td>
-                                </tr>
-                                <tr>
-                                    <td>hi</td>
-                                    <td>Malcolm Lockyer</td>
-                                    <td>1961</td>
-                                </tr>
-                                <tr>
-                                    <td>Witchy Woman</td>
-                                    <td>The Eagles</td>
-                                    <td>1972</td>
-                                </tr>
-                                <tr>
-                                    <td>Shining Star</td>
-                                    <td>Earth, Wind, and Fire</td>
-                                    <td>1975</td>
-                                </tr>
+                        {_password_array.length == 0 && <div className='w-full h-full text-center py-12'>No passwords to show</div>}
+
+                        {_password_array.length != 0 &&
+
+                            <table className="table-auto  w-full h-full   text-center">
+                                <thead className='bg-green4 text-green1'>
+                                    <tr>
+                                        <th>Song</th>
+                                        <th>Artist</th>
+                                        <th>Year</th>
+                                    </tr>
+                                </thead>
+                                <tbody className='px-1.5 text-white font-medium bg-green2'>
+                                    <tr>
+                                        <td className='py-2 border border-white'>hisdfhgf</td >
+                                        <td className='py-2 border border-white'>Malcolm Lockyer</td >
+                                        <td className='py-2 border border-white'>1961</td >
+                                    </tr>
+                                    <tr>
+                                        <td className='py-2 border border-white'>Witchy Woman</td >
+                                        <td className='py-2 border border-white'>The Eagles</td >
+                                        <td className='py-2 border border-white'>1972</td >
+                                    </tr>
+                                    <tr>
+                                        <td className='py-2 border border-white'>Shining Star</td >
+                                        <td className='py-2 border border-white'>Earth, Wind, and Fire</td >
+                                        <td className='py-2 border border-white'>1975</td >
+                                    </tr>
+                                    <tr>
+                                        <td className='py-2 border border-white'>Witchy Woman</td >
+                                        <td className='py-2 border border-white'>The Eagles</td >
+                                        <td className='py-2 border border-white'>1972</td >
+                                    </tr>
+                                    <tr>
+                                        <td className='py-2 border border-white'>Shining Star</td >
+                                        <td className='py-2 border border-white'>Earth, Wind, and Fire</td >
+                                        <td className='py-2 border border-white'>1975</td >
+                                    </tr>
 
 
 
-                            </tbody>
-                        </table>
+
+
+                                </tbody>
+                            </table>
+                        }
 
                     </div>
 
