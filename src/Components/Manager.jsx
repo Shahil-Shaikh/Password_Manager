@@ -127,42 +127,25 @@ function Manager() {
                             <table className="table-auto  w-full h-full   text-center">
                                 <thead className='bg-green4 text-green1'>
                                     <tr>
-                                        <th>Song</th>
-                                        <th>Artist</th>
-                                        <th>Year</th>
+                                        <th>Sites</th>
+                                        <th>Passwords</th>
                                     </tr>
                                 </thead>
                                 <tbody className='px-1.5 text-white font-medium bg-green2'>
-                                    <tr>
-                                        <td className='py-2 border border-white'>hisdfhgf</td >
-                                        <td className='py-2 border border-white'>Malcolm Lockyer</td >
-                                        <td className='py-2 border border-white'>1961</td >
-                                    </tr>
-                                    <tr>
-                                        <td className='py-2 border border-white'>Witchy Woman</td >
-                                        <td className='py-2 border border-white'>The Eagles</td >
-                                        <td className='py-2 border border-white'>1972</td >
-                                    </tr>
-                                    <tr>
-                                        <td className='py-2 border border-white'>Shining Star</td >
-                                        <td className='py-2 border border-white'>Earth, Wind, and Fire</td >
-                                        <td className='py-2 border border-white'>1975</td >
-                                    </tr>
-                                    <tr>
-                                        <td className='py-2 border border-white'>Witchy Woman</td >
-                                        <td className='py-2 border border-white'>The Eagles</td >
-                                        <td className='py-2 border border-white'>1972</td >
-                                    </tr>
-                                    <tr>
-                                        <td className='py-2 border border-white'>Shining Star</td >
-                                        <td className='py-2 border border-white'>Earth, Wind, and Fire</td >
-                                        <td className='py-2 border border-white'>1975</td >
-                                    </tr>
+                                    {_password_array.map((item, index) => {
+                                        return <tr key={index}>
+                                            <td className='py-2 border border-white'><a href={item.site} target='_blank'>{item.site}</a></td >
+                                            <td className='py-2 border border-white'>{item.psswd}</td >
+                                        </tr>
+                                    })}
 
+                                    {/* see the blank-and-_blank-in-react.md for clarification over usage and concept of 
+                                    blank and _blank as target */}
 
-
-
-
+                                    {/* The key attribute in React is a special string attribute used to uniquely identify elements within a 
+                                    list. This unique identity helps React efficiently track which items have changed, been added, or been 
+                                    removed when the list is updated, thus optimizing the rendering process. */}
+                                    
                                 </tbody>
                             </table>
                         }
