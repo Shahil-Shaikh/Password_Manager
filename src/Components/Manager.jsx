@@ -3,14 +3,14 @@ import { useRef, useState, useEffect } from 'react'
 
 function Manager() {
     const [PsswdValue, setPsswdValue] = useState("Show")
-    const [form, setform] = useState({"site": "", "psswd": ""})
+    const [form, setform] = useState({ "site": "", "psswd": "" })
     const [_password_array, set_password_array] = useState([])
 
-    
-// const passowrds = localStorage.getItem("psswds") 
-// dont put the above line here instead putting it inside the useEffect
+
+    // const passowrds = localStorage.getItem("psswds") 
+    // dont put the above line here instead putting it inside the useEffect
     useEffect(() => {
-        const passowrds = localStorage.getItem("psswds") 
+        const passowrds = localStorage.getItem("psswds")
         //this will fetch the passwords stored in the local storage 
         // and we are using useEffect so that it runs only once when the component is mounted 
         // and we can fetch the passwords from the local storage and set it in the state 
@@ -21,8 +21,8 @@ function Manager() {
         // So by putting it inside the useEffect with an empty dependency array, we ensure that it runs only once when the component is mounted and not on every render.
         // and it creates weird behaviour if we put that line outside useEffect, see the react_localstorage_debug_note.md
 
-        if(passowrds){ //this means IF PASSWORD is present in the local storage or not 
-            
+        if (passowrds) { //this means IF PASSWORD is present in the local storage or not 
+
             set_password_array(JSON.parse(passowrds))
 
             // we are parsing the passwords bcz when we store the passwords in the local 
@@ -31,27 +31,27 @@ function Manager() {
             // of objects in our case.
         }
     }, [])
-    
 
-    let handler = (e)=>{
-        setform({...form, [e.target.name]: e.target.value})
+
+    let handler = (e) => {
+        setform({ ...form, [e.target.name]: e.target.value })
     }
 
     const a = useRef()
     let psswdShowFun = () => {
-        if(PsswdValue==="Show"){
+        if (PsswdValue === "Show") {
             setPsswdValue("Hide")
-            a.current.type="text"
+            a.current.type = "text"
         }
-        else{
+        else {
             setPsswdValue("Show")
         }
     }
 
-    
+
 
     let submit = () => {
-      console.log(form); 
+        console.log(form);
         //   we can also now save it in the database using api call or we can also save it in the local storage of the browser.
         // Now if we are storing it in local storage then we can do it like this :
         // (first we will update password array and then we will update local storage)
@@ -68,10 +68,10 @@ function Manager() {
         // version of the password array which is [..._password_array, form] to make sure that we are 
         // storing the updated password array in the local storage. Otherwise the password stored will not 
         // be the updated one and it will be the old one without the new password that we just added.
-        console.log(_password_array); 
+        console.log(_password_array);
         //although while doing console.log it won't just display the current state instantly cuz it takes some time to update hte array while in the mean time the console.log is done with its execution
     }
-    
+
 
     return (
         <div>
@@ -79,9 +79,9 @@ function Manager() {
             <div className="absolute inset-0 -z-10 h-full w-full bg-white [background:linear-gradient(180deg,#ffffff_0%,#c9f3f4_45%,#17bec5_100%)]"></div>
 
 
-            <div className=' h-[calc(100dvh-3.75rem)] flex items-center '>
+            <div className='container_for_inputs_box_invisible h-[calc(100dvh-3.75rem)] flex items-center '>
                 {/* 3.75 rem is the height of the navbar and we minus it from the full viewport height */}
-                <div className='inputs h-11/12 grow content_size bg-white rounded-4xl p-5 flex flex-col'>
+                <div className='inputs_box_visible_rounded_rectangle h-11/12 grow content_size bg-white rounded-4xl p-5 flex flex-col'>
                     {/*content_size is an applied directive see the index.css for it's definition  */}
                     {/* we are using flex-grow: 1 (i.e. "grow" in tailwind) in this item , flex-grow allows the item to grow as much as possible to cover entire available space */}
 
@@ -94,7 +94,7 @@ function Manager() {
                         Now the initial value of PsswdValue while declaring it is set to Show and that when detected by the PsswdValue == "Show" condition
                         , it return the password which gets initialized inside type or else text is set when the condition gets false when the PsswdValue 
                         is set to "Hide" and as a result the type gets text. */}
-                       
+
                         <span onClick={psswdShowFun} className=' font-semibold cursor-pointer text-green1 absolute top-20 right-24 text-sm hover:text-green-300 transition-colors duration-300 select-none'>
                             {PsswdValue}
                         </span>
@@ -113,12 +113,93 @@ function Manager() {
                         {/* flex-direction: column stretches items to full width, while row usually limits them to content width. And so by default the input boxes and the button takes full width when we set the parent for flex direction as column*/}
                     </div>
 
-                    <div className='h-1/4 border-4 border-green4 grow rounded-4xl '>
+                    <div className='h-1/4 border-4 border-green4 grow  w-full overflow-y-auto'>
                         {/* One thing to note here, if we open the dev options in browser in the below then this box resizes on the y axis automatically
                     by shrinking on the y axis. THis happens due to the having of flex-shrink: 1 peroperty which is the default property for flex items.  
                     setting it to 0 will stop resizing it.
                     But here setting it to 0 will still cause it to resize as the height is not fixed rather it is 1/4 th of the parent container*/}
+
+                        {/* Table showing the content for passwords */}
+                        
+                        <table className="table-auto  w-full h-full   text-center">
+                            <thead className='bg-green4 text-green1'>
+                                <tr>
+                                    <th>Song</th>
+                                    <th>Artist</th>
+                                    <th>Year</th>
+                                </tr>
+                            </thead>
+                            <tbody className='px-1.5 text-white font-medium bg-green2'>
+                                <tr>
+                                    <td>hisdfhgf</td>
+                                    <td>Malcolm Lockyer</td>
+                                    <td>1961</td>
+                                </tr>
+                                <tr>
+                                    <td>Witchy Woman</td>
+                                    <td>The Eagles</td>
+                                    <td>1972</td>
+                                </tr>
+                                <tr>
+                                    <td>Shining Star</td>
+                                    <td>Earth, Wind, and Fire</td>
+                                    <td>1975</td>
+                                </tr>
+                                <tr>
+                                    <td>hi</td>
+                                    <td>Malcolm Lockyer</td>
+                                    <td>1961</td>
+                                </tr>
+                                <tr>
+                                    <td>Witchy Woman</td>
+                                    <td>The Eagles</td>
+                                    <td>1972</td>
+                                </tr>
+                                <tr>
+                                    <td>Shining Star</td>
+                                    <td>Earth, Wind, and Fire</td>
+                                    <td>1975</td>
+                                </tr>
+                                <tr>
+                                    <td>hi</td>
+                                    <td>Malcolm Lockyer</td>
+                                    <td>1961</td>
+                                </tr>
+                                <tr>
+                                    <td>Witchy Woman</td>
+                                    <td>The Eagles</td>
+                                    <td>1972</td>
+                                </tr>
+                                <tr>
+                                    <td>Shining Star</td>
+                                    <td>Earth, Wind, and Fire</td>
+                                    <td>1975</td>
+                                </tr>
+                                <tr>
+                                    <td>hi</td>
+                                    <td>Malcolm Lockyer</td>
+                                    <td>1961</td>
+                                </tr>
+                                <tr>
+                                    <td>Witchy Woman</td>
+                                    <td>The Eagles</td>
+                                    <td>1972</td>
+                                </tr>
+                                <tr>
+                                    <td>Shining Star</td>
+                                    <td>Earth, Wind, and Fire</td>
+                                    <td>1975</td>
+                                </tr>
+
+
+
+                            </tbody>
+                        </table>
+
                     </div>
+
+
+
                 </div>
             </div>
         </div>
