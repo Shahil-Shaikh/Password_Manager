@@ -82,14 +82,14 @@ function Manager() {
         //although while doing console.log it won't just display the current state instantly cuz it takes some time to update hte array while in the mean time the console.log is done with its execution
     }
 
-    // how the deletePsswd works is that it takes the id of the corresponding field and 
-    // then it rewrites the array object with every element exvept the one which is being deleted 
-    // by detecting the ids using filter
+// how the deletePsswd works is that it takes the id of the corresponding field and 
+// then it rewrites the array object with every element exvept the one which is being deleted 
+// by detecting the ids using filter
     let deletePsswd = (id) => {
-        set_password_array(_password_array.filter((item) => {
-            return id !== item.id;
-        }))
-        localStorage.setItem("psswds", JSON.stringify([..._password_array, { ...form, id: uuidv4() }]));
+       set_password_array(_password_array.filter((item)=>{
+            return id!==item.id;
+       }))
+               localStorage.setItem("psswds", JSON.stringify([..._password_array, { ...form, id: uuidv4() }]));
 
     }
 
@@ -160,7 +160,7 @@ function Manager() {
                                             <td className='py-2 border border-white'>{item.psswd}</td >
                                             <td className='py-2 border border-white'>
 
-
+                                            
                                                 <lord-icon
                                                     src="https://cdn.lordicon.com/exymduqj.json"
                                                     trigger="hover"
@@ -168,8 +168,8 @@ function Manager() {
                                                     className="w-7">
                                                 </lord-icon>
 
-
-                                                <lord-icon onClick={() => { deletePsswd(item.id) }}
+                                         
+                                                <lord-icon onClick={()=>{deletePsswd(item.id)}}
                                                     src="https://cdn.lordicon.com/jzinekkv.json"
                                                     trigger="hover"
                                                     colors="primary:#121331,secondary:#ffffff"
