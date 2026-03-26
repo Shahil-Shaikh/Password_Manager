@@ -80,31 +80,49 @@ function Manager() {
         // be the updated one and it will be the old one without the new password that we just added.
         console.log(_password_array);
         //although while doing console.log it won't just display the current state instantly cuz it takes some time to update hte array while in the mean time the console.log is done with its execution
+        setform({ site: "", psswd: "" })
     }
+
+
 
     // how the deletePsswd works is that it takes the id of the corresponding field and 
     // then it rewrites the array object with every element exvept the one which is being deleted 
     // by detecting the ids using filter
     let deletePsswd = (id) => {
-        set_password_array(_password_array.filter((item) => {
-            return id !== item.id;
-        }))
-        //localStorage.setItem("psswds", JSON.stringify(_password_array));
-        /*
-        NOTE: We could have used the above line but we did not. Cuz due to the same previous reason;
-        updating the state takes some time. And while it is not finished updating the state, it would end up saving the 
-        value of the old state instead the current newly updated state.
-        So as a solution we also do the same just like before by putting the functional part once more inside the setItem function of local storage 
-        like below~~
-        */
-        localStorage.setItem("psswds", JSON.stringify(
-            _password_array.filter((item) => {
+        let check = confirm("Are you sure to delete it?");
+        if (check) {
+
+            set_password_array(_password_array.filter((item) => {
                 return id !== item.id;
-            })
-        ));
+            }))
+            //localStorage.setItem("psswds", JSON.stringify(_password_array));
+            /*
+            NOTE: We could have used the above line but we did not. Cuz due to the same previous reason;
+            updating the state takes some time. And while it is not finished updating the state, it would end up saving the 
+            value of the old state instead the current newly updated state.
+            So as a solution we also do the same just like before by putting the functional part once more inside the setItem function of local storage 
+            like below~~
+            */
+            localStorage.setItem("psswds", JSON.stringify(
+                _password_array.filter((item) => {
+                    return id !== item.id;
+                })
+            ));
+        }
 
     }
 
+
+    let editPsswd = (id) => {
+        setform(_password_array.filter((item) => {
+            return id == item.id;
+        })[0]) //[0] as it returns an array and there is only one element in that array which we require that is the first elemt
+
+        //till now only the password and site is shown to the form. Now need to remove the row that is being deleted~~
+        set_password_array(_password_array.filter((item) => {
+            return id !== item.id;
+        }))
+    }
 
     return (
         <div>
@@ -173,7 +191,7 @@ function Manager() {
                                             <td className='py-2 border border-white'>
 
 
-                                                <lord-icon
+                                                <lord-icon onClick={() => { editPsswd(item.id) }}
                                                     src="https://cdn.lordicon.com/exymduqj.json"
                                                     trigger="hover"
                                                     colors="primary:#121331,secondary:#ffffff"
