@@ -1,7 +1,6 @@
 import React from 'react'
 import { useRef, useState, useEffect } from 'react'
 import { v4 as uuidv4 } from 'uuid';
-// uuid helps to generate unique id
 
 function Manager() {
     const [PsswdValue, setPsswdValue] = useState("Show")
@@ -9,8 +8,6 @@ function Manager() {
     const [_password_array, set_password_array] = useState([])
 
 
-    // const passowrds = localStorage.getItem("psswds") 
-    // dont put the above line here instead putting it inside the useEffect
     useEffect(() => {
         const passowrds = localStorage.getItem("psswds")
 
@@ -58,14 +55,7 @@ function Manager() {
             set_password_array(_password_array.filter((item) => {
                 return id !== item.id;
             }))
-            //localStorage.setItem("psswds", JSON.stringify(_password_array));
-            /*
-            NOTE: We could have used the above line but we did not. Cuz due to the same previous reason;
-            updating the state takes some time. And while it is not finished updating the state, it would end up saving the 
-            value of the old state instead the current newly updated state.
-            So as a solution we also do the same just like before by putting the functional part once more inside the setItem function of local storage 
-            like below~~
-            */
+            
             localStorage.setItem("psswds", JSON.stringify(
                 _password_array.filter((item) => {
                     return id !== item.id;
