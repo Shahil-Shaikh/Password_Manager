@@ -48,22 +48,23 @@ function Manager() {
 
     let submit = async () => {
         console.log(form);
+        let new_id = uuidv4(); //generating unique id for each password entry
+        set_password_array([..._password_array, { ...form, id: new_id }])
 
-        set_password_array([..._password_array, { ...form, id: uuidv4() }])
-
-        // localStorage.setItem("psswds", JSON.stringify([..._password_array, { ...form, id: uuidv4() }]));
+        // localStorage.setItem("psswds", JSON.stringify([..._password_array, { ...form, id: new_id }]));
         //The JSON.stringify() method takes a JavaScript value (such as an array or object) and converts it into a JSON string.
         let response = await fetch("http://localhost:3000", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
             },
-            body: JSON.stringify({ ...form, id: uuidv4() }) //converting form data to json string before sending it to backend
+            body: JSON.stringify({ ...form, id: new_id }) //converting form data to json string before sending it to backend
             //besides we are not only sending the form data but also we are adding an additional id and so spreading the form data using ...form.
         }
         )
         console.log("Password saved with respoonse: ", response);
         console.log(_password_array);
+        // console.log("SubmittedWithId:", new_id)
         setform({ site: "", psswd: "" })
     }
 
@@ -71,17 +72,25 @@ function Manager() {
 
     let deletePsswd = (id) => {
         let check = confirm("Are you sure to delete it?");
+        // console.log("deleting id: ", id);
         if (check) {
 
             set_password_array(_password_array.filter((item) => {
                 return id !== item.id;
             }))
 
-            localStorage.setItem("psswds", JSON.stringify(
-                _password_array.filter((item) => {
-                    return id !== item.id;
-                })
-            ));
+            // localStorage.setItem("psswds", JSON.stringify(
+            //     _password_array.filter((item) => {
+            //         return id !== item.id;
+            //     })
+            // ));
+            let response = fetch("http://localhost:3000/del", {
+                method: "DELETE",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({  id }) //converting id to json string before sending it to backend
+            })
         }
 
     }
