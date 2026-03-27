@@ -7,14 +7,25 @@ function Manager() {
     const [form, setform] = useState({ "site": "", "psswd": "" }) //form is am object
     const [_password_array, set_password_array] = useState([])
 
+//note: we are accessing another port from one port so cors policy will not allow us to do that. So we have to 
+// enable cors in backend to access data from another port. In our case we are accessing data from port 3000 
+// to port 5173 so we have to enable cors in backend.
+//For that we have to install cors package in backend and then we have to use it in backend. After that we can access data from another port.
+//install it by searching in google express js cors
 
     useEffect(() => {
-        const passowrds = localStorage.getItem("psswds")
-
-        if (passowrds) {
-
-            set_password_array(JSON.parse(passowrds))
-        }
+        (async function getDataFromDB() {
+            // const passowrds = localStorage.getItem("psswds")
+            const req = await fetch("http://localhost:3000") //fetching data from backend. It will be in string format
+            const passwords = await req.json();  //converting string data to json format
+            //set_password_array(JSON.parse(passowrds)) //Json.parse and req.json both are doing the same thing. They are converting string data to json format. But req.json is used when we are fetching data from backend and Json.parse is used when we are getting data from localStorage
+            set_password_array(passwords);
+            console.log(_password_array)
+//console.log shows empty array because set_password_array is asynchronous function. It means that it will not update the state immediately. 
+// It will update the state after some time. So when we are logging the state immediately after setting it, it will show the old state which 
+// is empty array. To see the updated state, we can use useEffect with _password_array as dependency. So whenever _password_array changes, it 
+// will log the updated state.
+        })()
     }, [])
 
 
@@ -35,13 +46,23 @@ function Manager() {
 
 
 
-    let submit = () => {
+    let submit = async () => {
         console.log(form);
 
         set_password_array([..._password_array, { ...form, id: uuidv4() }])
 
-        localStorage.setItem("psswds", JSON.stringify([..._password_array, { ...form, id: uuidv4() }]));
-
+        // localStorage.setItem("psswds", JSON.stringify([..._password_array, { ...form, id: uuidv4() }]));
+        //The JSON.stringify() method takes a JavaScript value (such as an array or object) and converts it into a JSON string.
+        let response = await fetch("http://localhost:3000", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ ...form, id: uuidv4() }) //converting form data to json string before sending it to backend
+            //besides we are not only sending the form data but also we are adding an additional id and so spreading the form data using ...form.
+        }
+        )
+        console.log("Password saved with respoonse: ", response);
         console.log(_password_array);
         setform({ site: "", psswd: "" })
     }
@@ -55,7 +76,7 @@ function Manager() {
             set_password_array(_password_array.filter((item) => {
                 return id !== item.id;
             }))
-            
+
             localStorage.setItem("psswds", JSON.stringify(
                 _password_array.filter((item) => {
                     return id !== item.id;
