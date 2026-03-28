@@ -52,7 +52,7 @@ function Manager() {
     /*
         This is the portion where the edit functionality takes place fully from DB side.
         The CONCEPT behind this is as follows:
-        
+
         Case1) Each form has id section besides other two fields. When user newly submits a form, the id remains empty and only the 
         site name and password is there in the input. At this point hte below if condition checks for id. When it sees id section is empty,
         then it simply skips the if condition and add the input fields along with an id in the DB.
@@ -135,7 +135,8 @@ function Manager() {
         set_password_array(_password_array.filter((item) => {                   //Updates the UI by removing the entry that is being edited
             return id !== item.id;
         }))
-        //This portion will only only do the fronted work. The deletion of data and getting edited from DB is done in the submit functionality. See that portion.
+        //This portion will only only do the fronted work. 
+        //The deletion of data and getting edited from DB is done in the submit functionality. See that portion.
     }
 
     return (
