@@ -4,14 +4,14 @@ import { v4 as uuidv4 } from 'uuid';
 
 function Manager() {
     const [PsswdValue, setPsswdValue] = useState("Show")
-    const [form, setform] = useState({ "site": "", "psswd": "" }) //form is am object
+    const [form, setform] = useState({ "site": "", "psswd": "", id: "" }) //form is am object
     const [_password_array, set_password_array] = useState([])
 
-//note: we are accessing another port from one port so cors policy will not allow us to do that. So we have to 
-// enable cors in backend to access data from another port. In our case we are accessing data from port 3000 
-// to port 5173 so we have to enable cors in backend.
-//For that we have to install cors package in backend and then we have to use it in backend. After that we can access data from another port.
-//install it by searching in google express js cors
+    //note: we are accessing another port from one port so cors policy will not allow us to do that. So we have to 
+    // enable cors in backend to access data from another port. In our case we are accessing data from port 3000 
+    // to port 5173 so we have to enable cors in backend.
+    //For that we have to install cors package in backend and then we have to use it in backend. After that we can access data from another port.
+    //install it by searching in google express js cors
 
     useEffect(() => {
         (async function getDataFromDB() {
@@ -21,10 +21,10 @@ function Manager() {
             //set_password_array(JSON.parse(passowrds)) //Json.parse and req.json both are doing the same thing. They are converting string data to json format. But req.json is used when we are fetching data from backend and Json.parse is used when we are getting data from localStorage
             set_password_array(passwords);
             console.log(_password_array)
-//console.log shows empty array because set_password_array is asynchronous function. It means that it will not update the state immediately. 
-// It will update the state after some time. So when we are logging the state immediately after setting it, it will show the old state which 
-// is empty array. To see the updated state, we can use useEffect with _password_array as dependency. So whenever _password_array changes, it 
-// will log the updated state.
+            //console.log shows empty array because set_password_array is asynchronous function. It means that it will not update the state immediately. 
+            // It will update the state after some time. So when we are logging the state immediately after setting it, it will show the old state which 
+            // is empty array. To see the updated state, we can use useEffect with _password_array as dependency. So whenever _password_array changes, it 
+            // will log the updated state.
         })()
     }, [])
 
@@ -48,6 +48,32 @@ function Manager() {
 
     let submit = async () => {
         console.log(form);
+    //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~Edit Functionality Section~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    /*
+        This is the portion where the edit functionality takes place fully from DB side.
+        The CONCEPT behind this is as follows:
+        
+        Case1) Each form has id section besides other two fields. When user newly submits a form, the id remains empty and only the 
+        site name and password is there in the input. At this point hte below if condition checks for id. When it sees id section is empty,
+        then it simply skips the if condition and add the input fields along with an id in the DB.
+
+        Case2) Now when user clicks on edit, the site and password section gets populated while the UI gets updated but in the backend still the old
+        data is there. At this moment the form populates but the only difference is it also populates the id section as well. This time id is not empty.
+        Now at this momemnt, when the below if condition checks that there is an id with the form and so which means it is an old entry not new, then the if 
+        condition runs and deletes the data from the DB. Then the code after the if condition runs to add this newly edited data but along with a new ID.
+        And all of this happens only when user clicks on submit. Till then user can cancel to edit as well.
+    */
+        if (form.id) {             
+            console.log("DELETE DELETE DELEEET")
+            let response = fetch("http://localhost:3000/del", {
+                method: "DELETE",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ id: form.id }) //converting id to json string before sending it to backend
+            })
+        }
+    //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~Edit Functionality Section~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         let new_id = uuidv4(); //generating unique id for each password entry
         set_password_array([..._password_array, { ...form, id: new_id }])
 
@@ -66,6 +92,7 @@ function Manager() {
         console.log(_password_array);
         // console.log("SubmittedWithId:", new_id)
         setform({ site: "", psswd: "" })
+
     }
 
 
@@ -89,20 +116,26 @@ function Manager() {
                 headers: {
                     "Content-Type": "application/json"
                 },
-                body: JSON.stringify({  id }) //converting id to json string before sending it to backend
+                body: JSON.stringify({ id }) //converting id to json string before sending it to backend
             })
         }
 
     }
-
+    /*
+    In the lcoal storage version, we were deleting entry by deleting member from array, and that used to get populate in
+    the input fields and removed from the ui. After that when we were clicking on submit, the newly updated array was overwriting the old
+    array in the local storage. As a result the password that got filtered out for deleting in the Array gets entirely deleted due 
+    to the reason that the new array replaces the old array in the local storage.
+    
+    Now here in the mongoDB we have to deal with it properly by deleting the entry explicitly here.
+    */
 
     let editPsswd = (id) => {
-        setform(_password_array.filter((item) => {
-            return id == item.id;
-        })[0])
-        set_password_array(_password_array.filter((item) => {
+        setform(_password_array.filter((item) => { return id == item.id; })[0]) //Populates the edited data to the input fields by setting the form object with three fields (site, password and id)
+        set_password_array(_password_array.filter((item) => {                   //Updates the UI by removing the entry that is being edited
             return id !== item.id;
         }))
+        //This portion will only only do the fronted work. The deletion of data and getting edited from DB is done in the submit functionality. See that portion.
     }
 
     return (
